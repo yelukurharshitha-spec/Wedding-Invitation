@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Rahul weds Kiran — An Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Yatra+One&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon-deep:#4A0E1C;
+  --maroon:#6E1226;
+  --maroon-light:#8C1E33;
+  --gold:#D4AF37;
+  --gold-bright:#F3D686;
+  --gold-dim:#9C7A2E;
+  --navy:#0A2036;
+  --teal:#0E6E6A;
+  --teal-light:#2FA79E;
+  --cream:#FBF1DE;
+  --cream-dark:#EFDDB6;
+  --ink:#2A1810;
+  --shadow-deep: 0 20px 60px rgba(20,5,10,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Poppins',sans-serif;
+  overflow-x:hidden;
+  position:relative;
+}
+::selection{background:var(--gold);color:var(--maroon-deep);}
+
+/* ---------- utility type classes ---------- */
+.display{font-family:'Cormorant Garamond',serif;}
+.temple-font{font-family:'Yatra One',cursive;}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;}
+.eyebrow{
+  font-family:'Yatra One',cursive;
+  letter-spacing:.12em;
+  color:var(--gold-dim);
+  font-size:.95rem;
+  text-transform:uppercase;
+}
+
+/* ---------- gold foil text ---------- */
+.foil{
+  background:linear-gradient(100deg,#7a5b1a 0%, #f6e2a0 22%, #fffbe6 38%, #caa543 55%, #f8e6ab 70%, #8a691f 100%);
+  background-size:250% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:foilShift 7s ease-in-out infinite;
+  text-shadow:0 2px 18px rgba(212,175,55,.25);
+}
+@keyframes foilShift{
+  0%,100%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+}
+
+/* ---------- floating gold particles ---------- */
+#particle-canvas{
+  position:fixed;inset:0;pointer-events:none;z-index:5;width:100%;height:100%;
+}
+
+/* ---------- reveal on scroll ---------- */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s ease, transform 1s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+.reveal-scale{opacity:0;transform:scale(.85);transition:opacity 1.1s ease, transform 1.1s ease;}
+.reveal-scale.in{opacity:1;transform:scale(1);}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal,.reveal-scale{transition:none;opacity:1;transform:none;}
+  .foil{animation:none;}
+}
+
+/* ================= NAV ================= */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 5vw;
+  background:linear-gradient(180deg, rgba(10,10,15,.55), transparent);
+  transition:background .4s ease, padding .4s ease;
+}
+.topnav.scrolled{
+  background:rgba(20,6,12,.82);
+  backdrop-filter:blur(10px);
+  padding:10px 5vw;
+  box-shadow:0 4px 24px rgba(0,0,0,.3);
+}
+.topnav .brand{
+  font-family:'Yatra One',cursive;color:var(--gold-bright);
+  font-size:1.15rem;letter-spacing:.06em;
+}
+.topnav .links{display:flex;gap:26px;}
+.topnav .links a{
+  color:var(--cream);text-decoration:none;font-size:.78rem;
+  letter-spacing:.14em;text-transform:uppercase;opacity:.85;
+  position:relative;padding-bottom:4px;
+}
+.topnav .links a::after{
+  content:'';position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--gold);transition:width .35s ease;
+}
+.topnav .links a:hover::after{width:100%;}
+.topnav .links a:hover{opacity:1;}
+@media (max-width:760px){.topnav .links{display:none;}}
+
+/* ================= HERO ================= */
+.hero{
+  position:relative;min-height:100svh;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  background:linear-gradient(180deg,#1a1108 0%, #2a1810 100%);
+}
+/* ---- photo layer: drop your temple photograph in here ---- */
+.hero-photo-layer{position:absolute;top:-10%;left:-6%;right:-6%;width:112%;height:124%;z-index:1;}
+.hero-photo-layer img{
+  width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;
+  transform:scale(1.08);
+}
+.temple-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;text-align:center;padding:40px;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(212,175,55,.18), transparent 60%),
+    linear-gradient(160deg,#3a0c18 0%, #1a2a3a 55%, #0e6e6a 100%);
+}
+.temple-placeholder .ph-frame{
+  width:min(560px,80vw);padding:36px 28px;border:1.5px dashed rgba(212,175,55,.6);
+}
+.temple-placeholder svg{width:56px;margin:0 auto 14px;opacity:.85;}
+.temple-placeholder .ph-title{
+  font-family:'Yatra One',cursive;color:var(--gold-bright);font-size:1.3rem;letter-spacing:.05em;
+}
+.temple-placeholder .ph-hint{
+  margin-top:10px;color:var(--cream-dark);opacity:.7;font-size:.82rem;line-height:1.6;font-family:'Poppins',sans-serif;
+}
+.temple-placeholder .ph-hint code{
+  color:var(--gold-bright);background:rgba(212,175,55,.12);padding:2px 6px;border-radius:3px;font-size:.78rem;
+}
+.hero-scrim{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(10,6,4,.35) 0%, rgba(10,6,4,.05) 32%, rgba(10,6,4,.1) 60%, rgba(251,241,222,.92) 94%, var(--cream) 100%);
+}
+.hero .birds{position:absolute;top:8%;left:10%;width:70px;opacity:.5;animation:driftBirds 30s linear infinite;z-index:3;}
+@keyframes driftBirds{0%{transform:translateX(0);}100%{transform:translateX(60vw);}}
+
+.hero-content{
+  position:relative;z-index:10;text-align:center;padding:0 20px;margin-top:-4vh;
+}
+.hero-eyebrow{
+  font-family:'Yatra One',cursive;color:var(--gold-bright);
+  letter-spacing:.3em;font-size:.8rem;text-transform:uppercase;
+  opacity:.9;margin-bottom:10px;text-shadow:0 2px 14px rgba(0,0,0,.45);
+}
+.hero-title{
+  font-size:clamp(2.6rem, 9vw, 6.2rem);
+  line-height:1;
+  font-weight:700;
+  color:#000;
+  text-shadow:0 2px 4px rgba(255,255,255,.35), 0 4px 30px rgba(0,0,0,.25);
+}
+.hero-title .weds{
+  display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;
+  font-size:.34em;color:#000;margin:6px 0;letter-spacing:.1em;
+}
+.hero-sub{
+  margin-top:18px;font-family:'Poppins',sans-serif;font-weight:400;
+  color:var(--cream);letter-spacing:.08em;font-size:.95rem;text-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+.scroll-cue{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--cream);
+  opacity:.85;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+}
+.scroll-cue .stick{width:1px;height:32px;background:linear-gradient(var(--gold-bright),transparent);animation:stickPulse 1.8s ease-in-out infinite;}
+@keyframes stickPulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+/* invitation overlay card floats over hero bottom edge, tucked between sky and next section */
+.invite-card{
+  position:relative;z-index:15;max-width:620px;margin:-90px auto 0;padding:46px 34px 40px;
+  background:
+    linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+  border:2px solid var(--gold);
+  outline:1px solid rgba(212,175,55,.35);
+  outline-offset:6px;
+  box-shadow:var(--shadow-deep);
+  text-align:center;
+}
+.invite-card .corner{position:absolute;width:46px;height:46px;opacity:.9;}
+.invite-card .corner.tl{top:-2px;left:-2px;}
+.invite-card .corner.tr{top:-2px;right:-2px;transform:scaleX(-1);}
+.invite-card .corner.bl{bottom:-2px;left:-2px;transform:scaleY(-1);}
+.invite-card .corner.br{bottom:-2px;right:-2px;transform:scale(-1,-1);}
+.invite-card p.blessing{
+  font-style:italic;color:var(--maroon);font-size:1.02rem;line-height:1.7;
+  font-family:'Cormorant Garamond',serif;
+}
+.invite-card .names{
+  margin:18px 0 6px;font-size:clamp(1.8rem,5vw,2.6rem);color:var(--maroon-deep);
+}
+.invite-card .amp{
+  display:block;font-family:'Yatra One',cursive;color:var(--gold-dim);font-size:1.1rem;margin:6px 0;
+}
+
+/* ================= SECTION SHELL ================= */
+section{position:relative;padding:110px 6vw;}
+.section-cream{background:var(--cream);}
+.section-maroon{background:var(--cream);color:var(--ink);}
+.section-navy{background:var(--cream);color:var(--ink);}
+.section-head{text-align:center;max-width:720px;margin:0 auto 60px;}
+.section-head h2{font-size:clamp(2rem,5vw,3.2rem);margin-top:8px;}
+.divider-lotus{width:74px;margin:22px auto 0;opacity:.85;}
+
+/* ornate frame border used repeatedly */
+.ornate-border{
+  position:relative;border:1px solid rgba(212,175,55,.5);
+}
+.ornate-border::before{
+  content:'';position:absolute;inset:8px;border:1px solid rgba(212,175,55,.3);pointer-events:none;
+}
+
+/* ============ MAIN INVITATION DETAILS ============ */
+.details-card{
+  max-width:900px;margin:0 auto;background:var(--cream);
+  border:2px solid var(--gold);padding:60px 40px;position:relative;
+  box-shadow:var(--shadow-deep);
+}
+.details-grid{
+  display:grid;grid-template-columns:1fr 1px 1fr;gap:40px;margin-top:44px;
+}
+.details-grid .rule{background:linear-gradient(var(--gold),transparent);}
+.detail-block{text-align:center;}
+.detail-block .icon{width:52px;margin:0 auto 14px;}
+.detail-block h3{color:var(--maroon-deep);font-size:1.5rem;margin-bottom:6px;}
+.detail-block p{color:var(--ink);opacity:.8;font-size:.95rem;line-height:1.6;}
+@media (max-width:700px){.details-grid{grid-template-columns:1fr;}.details-grid .rule{display:none;}}
+
+/* ============ PRE-WEDDING EVENTS (accordion) ============ */
+.events-wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
+.event-item{
+  border:1px solid rgba(74,14,28,.18);
+  background:rgba(74,14,28,.03);
+  overflow:hidden;
+}
+.event-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:26px 30px;cursor:pointer;gap:20px;
+}
+.event-head .left{display:flex;align-items:center;gap:18px;}
+.event-head .glyph{width:44px;height:44px;flex:none;}
+.event-head h3{font-size:1.6rem;color:var(--maroon-deep);}
+.event-head .tag{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;opacity:.6;}
+.event-plus{width:22px;height:22px;position:relative;flex:none;}
+.event-plus::before,.event-plus::after{
+  content:'';position:absolute;background:var(--maroon-deep);transition:transform .35s ease;
+}
+.event-plus::before{top:50%;left:0;width:100%;height:1.5px;transform:translateY(-50%);}
+.event-plus::after{left:50%;top:0;height:100%;width:1.5px;transform:translateX(-50%);}
+.event-item.open .event-plus::after{transform:translateX(-50%) rotate(90deg);opacity:0;}
+.event-body{
+  max-height:0;overflow:hidden;transition:max-height .5s ease;
+}
+.event-item.open .event-body{max-height:420px;}
+.event-body-inner{
+  padding:0 30px 32px;display:grid;grid-template-columns:1.1fr 1fr;gap:34px;align-items:center;
+}
+@media (max-width:700px){.event-body-inner{grid-template-columns:1fr;}}
+.event-illo{width:100%;height:auto;}
+.event-photo-frame{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:rgba(74,14,28,.08);border:1px solid rgba(212,175,55,.5);}
+.event-photo-frame img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:2;}
+.event-photo-frame .event-illo{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.event-body p.desc{opacity:.85;line-height:1.75;font-size:.95rem;margin-bottom:14px;}
+.event-meta{display:flex;flex-direction:column;gap:8px;font-size:.92rem;}
+.event-meta span.k{color:var(--gold-dim);letter-spacing:.08em;text-transform:uppercase;font-size:.7rem;margin-right:8px;}
+
+/* ============ BRIDE & GROOM ============ */
+.couple-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1000px;margin:0 auto;align-items:start;
+}
+@media (max-width:760px){.couple-grid{grid-template-columns:1fr;gap:70px;}}
+.couple-card{text-align:center;position:relative;}
+.frame{
+  position:relative;width:100%;max-width:340px;margin:0 auto 26px;aspect-ratio:3/4;
+}
+.frame svg{width:100%;height:100%;display:block;}
+.frame-photo{
+  position:absolute;left:5.9%;top:4.5%;width:88.2%;height:91.1%;
+  object-fit:cover;z-index:2;
+}
+.couple-card h3{font-size:2rem;color:var(--maroon-deep);}
+.couple-card .role{
+  font-family:'Yatra One',cursive;color:var(--gold-dim);font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;
+}
+.couple-card p.bio{max-width:320px;margin:10px auto 0;font-size:.92rem;line-height:1.7;opacity:.8;}
+
+/* ============ COUNTDOWN ============ */
+.countdown-section{
+  position:relative;
+  background:var(--cream);
+  color:var(--ink);overflow:hidden;
+}
+.countdown-section .mountains{position:absolute;bottom:0;left:0;width:100%;opacity:.55;}
+.countdown-boxes{
+  display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:50px;position:relative;z-index:5;
+}
+.cbox{
+  width:110px;padding:22px 0;text-align:center;
+  background:rgba(74,14,28,.04);
+  border:1px solid rgba(212,175,55,.6);
+  position:relative;
+}
+.cbox::before{content:'';position:absolute;inset:6px;border:1px solid rgba(212,175,55,.3);}
+.cbox .num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--maroon-deep);line-height:1;}
+.cbox .lab{margin-top:8px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7;}
+@media(max-width:500px){.cbox{width:76px;padding:16px 0;}.cbox .num{font-size:1.8rem;}}
+
+/* ============ GALLERY ============ */
+.gallery-grid{
+  columns:3 260px;column-gap:22px;max-width:1150px;margin:0 auto;
+}
+.gallery-item{
+  break-inside:avoid;margin-bottom:22px;position:relative;border:6px solid var(--cream);
+  box-shadow:0 14px 34px rgba(74,14,28,.18);
+  background:rgba(74,14,28,.05);
+}
+.gallery-item img{width:100%;display:block;min-height:220px;object-fit:cover;background:rgba(74,14,28,.06);}
+.gallery-item::after{
+  content:'';position:absolute;inset:0;border:1px solid var(--gold);pointer-events:none;
+}
+.gallery-cap{
+  position:absolute;bottom:0;left:0;right:0;padding:10px 14px 8px;
+  background:linear-gradient(0deg, rgba(74,14,28,.75), transparent);
+  color:var(--cream-dark);font-size:.75rem;letter-spacing:.06em;
+  opacity:0;transition:opacity .3s ease;
+}
+.gallery-item:hover .gallery-cap{opacity:1;}
+
+/* ============ VENUE ============ */
+.venue-card{
+  max-width:820px;margin:0 auto;text-align:center;background:rgba(74,14,28,.03);
+  border:1px solid rgba(212,175,55,.5);padding:56px 34px;
+}
+.venue-card h3{font-size:2rem;color:var(--maroon-deep);margin-bottom:10px;}
+.venue-card p{opacity:.8;line-height:1.8;margin-bottom:26px;}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 34px;border:1px solid var(--gold);
+  color:var(--maroon-deep);text-decoration:none;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;
+  position:relative;overflow:hidden;transition:color .35s ease;
+}
+.btn-gold::before{
+  content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .4s ease;z-index:-1;
+}
+.btn-gold:hover{color:var(--maroon-deep);}
+.btn-gold:hover::before{transform:translateX(0);}
+
+/* ============ SOCIAL ============ */
+.social-section{text-align:center;}
+
+/* ============ BLESSING / FAMILY NOTE ============ */
+.family-note-card{
+  max-width:760px;margin:0 auto;text-align:center;background:rgba(74,14,28,.03);
+  border:1px solid rgba(212,175,55,.5);padding:56px 40px;
+}
+.family-note-card p.msg{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.9;
+  color:var(--maroon);opacity:.9;
+}
+.family-note-card .fam-names{
+  margin-top:26px;font-size:1.3rem;color:var(--maroon-deep);letter-spacing:.04em;
+}
+
+.hashtag{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.8rem,5vw,3rem);
+  color:var(--maroon-deep);margin:16px 0 34px;
+}
+.social-icons{display:flex;justify-content:center;gap:26px;}
+.social-icons a{
+  width:52px;height:52px;border:1px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:var(--maroon-deep);
+  transition:background .3s ease,color .3s ease,transform .3s ease;text-decoration:none;
+}
+.social-icons a:hover{background:var(--maroon-deep);color:var(--gold-bright);transform:translateY(-4px);}
+.social-icons svg{width:22px;height:22px;fill:currentColor;}
+
+/* ============ FOOTER ============ */
+footer{
+  background:var(--maroon-deep);color:var(--cream-dark);text-align:center;padding:70px 6vw 40px;
+}
+footer .fnames{font-size:1.6rem;color:var(--gold-bright);margin-bottom:6px;}
+footer .fline{opacity:.6;font-size:.8rem;letter-spacing:.1em;margin-top:18px;}
+
+/* peacock corner decorations reused */
+.peacock-corner{position:absolute;width:120px;opacity:.5;pointer-events:none;}
+.pc-tl{top:10px;left:10px;}
+.pc-br{bottom:10px;right:10px;transform:scale(-1,-1);}
+
+@media (max-width:700px){
+  section{padding:80px 6vw;}
+  .peacock-corner{width:70px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ================= NAV ================= -->
+<nav class="topnav" id="topnav">
+  <div class="brand">V &amp; S</div>
+  <div class="links">
+    <a href="#invitation">Invitation</a>
+    <a href="#events">Events</a>
+    <a href="#couple">Couple</a>
+    <a href="#countdown">Countdown</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#venue">Venue</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="hero">
+
+  <!-- ===================================================================
+       TEMPLE PHOTO — replace the src below with your own photograph.
+       Example: src="my-temple-photo.jpg" (place the file next to this
+       HTML file, or paste a full image URL). Until a valid image is
+       set, a placeholder panel with instructions is shown automatically.
+  ==================================================================== -->
+  <div class="hero-photo-layer">
+    <img id="templeImg"
+         src="./indian-temple-3396438.webp"
+         alt="South Indian temple gopuram against a bright blue sky"
+         onerror="this.style.display='none'; document.getElementById('templePlaceholder').style.display='flex';"
+         onload="document.getElementById('templePlaceholder').style.display='none';">
+    <div class="temple-placeholder" id="templePlaceholder">
+      <div class="ph-frame">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#D4AF37" stroke-width="2">
+          <path d="M10 50 H50 M14 50 V38 H46 V50 M18 38 V28 H42 V38 M22 28 V20 H38 V28"/>
+          <path d="M22 20 L30 8 L38 20 Z"/>
+        </svg>
+    </div>
+  </div>
+  <div class="hero-scrim"></div>
+
+  <svg class="birds" viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 15 Q10 5 15 15 Q20 5 25 15" stroke="#F3D686" stroke-width="1.4" fill="none" opacity=".5"/>
+    <path d="M40 8 Q45 0 50 8 Q55 0 60 8" stroke="#F3D686" stroke-width="1.2" fill="none" opacity=".4"/>
+  </svg>
+
+  <div class="scroll-cue"><span>Scroll</span><div class="stick"></div></div>
+</header>
+
+<!-- floating invitation card straddling hero and next section -->
+<div class="invite-card reveal-scale" id="invite-card">
+  <svg class="corner tl" viewBox="0 0 46 46"><path d="M2 44 V10 Q2 2 10 2 H44" stroke="#D4AF37" stroke-width="2" fill="none"/><circle cx="10" cy="10" r="3" fill="#D4AF37"/></svg>
+  <svg class="corner tr" viewBox="0 0 46 46"><path d="M2 44 V10 Q2 2 10 2 H44" stroke="#D4AF37" stroke-width="2" fill="none"/><circle cx="10" cy="10" r="3" fill="#D4AF37"/></svg>
+  <svg class="corner bl" viewBox="0 0 46 46"><path d="M2 44 V10 Q2 2 10 2 H44" stroke="#D4AF37" stroke-width="2" fill="none"/><circle cx="10" cy="10" r="3" fill="#D4AF37"/></svg>
+  <svg class="corner br" viewBox="0 0 46 46"><path d="M2 44 V10 Q2 2 10 2 H44" stroke="#D4AF37" stroke-width="2" fill="none"/><circle cx="10" cy="10" r="3" fill="#D4AF37"/></svg>
+
+  <p class="eyebrow">Om Sri Ganeshaya Namah</p>
+  <p class="blessing">With the blessings of God and our beloved parents, we joyfully invite you to witness and bless the union of</p>
+  <div class="names display">Vinutha <span class="amp">&amp;</span> Sanjeev</div>
+  <p class="blessing" style="margin-top:10px;">as they begin their journey of togetherness, wrapped in tradition, love, and the warmth of family.</p>
+</div>
+
+<!-- ================= MAIN INVITATION DETAILS ================= -->
+<section class="section-cream" id="invitation">
+  <svg class="peacock-corner pc-tl" viewBox="0 0 120 120" fill="none"><path d="M10 110 C10 70 40 50 40 20 C40 5 55 5 55 20 C55 45 30 55 30 90" stroke="#D4AF37" stroke-width="2"/><circle cx="40" cy="20" r="6" stroke="#6E1226" stroke-width="2"/></svg>
+  <div class="section-head reveal">
+    <p class="eyebrow">The Invitation</p>
+    <h2>A Sacred Beginning</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+
+  <div class="details-card reveal">
+    <div style="text-align:center;">
+      <p class="eyebrow" style="color:var(--gold-dim);">Ganesh Chaturthi Blessings Precede The Ceremony</p>
+      <h3 class="display" style="font-size:2.3rem;color:var(--maroon-deep);margin-top:10px;">Wedding Ceremony</h3>
+      <p style="opacity:.75;max-width:520px;margin:12px auto 0;line-height:1.8;">
+        Join us as Vinutha and Sanjeev take their sacred vows around the holy fire, uniting two families in the timeless traditions of our ancestors.
+      </p>
+    </div>
+
+    <div class="details-grid">
+      <div class="detail-block">
+        <svg class="icon" viewBox="0 0 52 52"><rect x="6" y="12" width="40" height="34" rx="2" fill="none" stroke="#6E1226" stroke-width="2"/><path d="M6 20 H46" stroke="#D4AF37" stroke-width="2"/><path d="M16 6 V16 M36 6 V16" stroke="#6E1226" stroke-width="2"/><circle cx="26" cy="33" r="6" fill="#D4AF37"/></svg>
+        <h3>Date</h3>
+        <p>Friday<br>20th November 2026</p>
+      </div>
+      <div class="rule"></div>
+      <div class="detail-block">
+        <svg class="icon" viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="#6E1226" stroke-width="2"/><path d="M26 14 V26 L34 31" stroke="#D4AF37" stroke-width="2" fill="none"/></svg>
+        <h3>Time</h3>
+        <p>Muhurtham at 9:42 AM<br>Reception from 7:00 PM</p>
+      </div>
+      <div class="rule"></div>
+      <div class="detail-block">
+        <svg class="icon" viewBox="0 0 52 52"><path d="M26 6 C36 6 42 14 42 24 C42 36 26 46 26 46 C26 46 10 36 10 24 C10 14 16 6 26 6 Z" fill="none" stroke="#6E1226" stroke-width="2"/><circle cx="26" cy="23" r="6" fill="#D4AF37"/></svg>
+        <h3>Venue</h3>
+        <p>I.C.R Convention (Sri Gayathri Pitam oppsite, Rural Police Station backside)<br>Dhone, Nandyal District</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRE-WEDDING EVENTS ================= -->
+<section class="section-maroon" id="events">
+  <div class="section-head reveal">
+    <p class="eyebrow">Celebrations</p>
+    <h2>Pre-Wedding Festivities</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+
+  <div class="events-wrap reveal">
+    <div class="event-item open" data-event>
+      <div class="event-head">
+        <div class="left">
+          <svg class="glyph" viewBox="0 0 44 44"><path d="M22 6 C28 14 32 18 32 26 A10 10 0 1 1 12 26 C12 18 16 14 22 6 Z" fill="none" stroke="#D4AF37" stroke-width="2"/><path d="M22 20 C24 24 26 25 26 29" stroke="#D4AF37" stroke-width="1.5" fill="none"/></svg>
+          <div>
+            <h3>Haldi & Bride Making</h3>
+            <div class="tag">19th November · Bride's Residence</div>
+          </div>
+        </div>
+        <div class="event-plus"></div>
+      </div>
+      <div class="event-body">
+        <div class="event-body-inner">
+          <!--
+            HALDI PHOTO — replace the src below with your own photo file
+            or image URL, e.g. src="./haldi-photo.jpg". Until a valid
+            image is set, the illustrated fallback below shows through.
+          -->
+          <div class="event-photo-frame">
+            <svg class="event-illo" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#3A0C18"/>
+              <circle cx="200" cy="120" r="70" fill="#8C1E33"/>
+              <path d="M150 190 C170 240 230 240 250 190" stroke="#D4AF37" stroke-width="3" fill="none"/>
+              <path d="M140 100 C150 70 180 60 200 60 C220 60 250 70 260 100" stroke="#D4AF37" stroke-width="2" fill="none"/>
+              <g stroke="#F3D686" stroke-width="1.5" fill="none">
+                <path d="M120 220 Q200 260 280 220"/>
+                <circle cx="200" cy="230" r="5"/>
+              </g>
+              <text x="200" y="285" text-anchor="middle" fill="#F3D686" font-size="14" font-family="Cormorant Garamond, serif" font-style="italic">Henna traced in love, tradition, and joy</text>
+            </svg>
+            <img src="./haldi.webp" alt="Haldi ceremony"
+                 onerror="this.style.display='none';">
+          </div>
+          <div>
+            <p class="desc">The haldi ceremony is a fun pre-wedding ritual in Indian weddings. Close family and friends gather to apply a bright yellow paste of turmeric (haldi), sandalwood, and oils to the bride. It blesses the couple, purifies their skin, and protects them from bad luck before the wedding day.</p>
+            <div class="event-meta">
+              <div><span class="k">Date</span>19 NOV 2026, 9:00 AM</div>
+              <div><span class="k">Attire</span>Yellow Traditional</div>
+              <div><span class="k">Venue</span>I.C.R Convention (Sri Gayathri Pitam oppsite, Rural Police Station backside)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-item" data-event>
+      <div class="event-head">
+        <div class="left">
+          <svg class="glyph" viewBox="0 0 44 44"><path d="M8 30 Q22 10 36 30" stroke="#D4AF37" stroke-width="2" fill="none"/><circle cx="22" cy="18" r="4" fill="#D4AF37"/></svg>
+          <div>
+            <h3>Reception Evening</h3>
+            <div class="tag">19th November · Taj Hotel</div>
+          </div>
+        </div>
+        <div class="event-plus"></div>
+      </div>
+      <div class="event-body">
+        <div class="event-body-inner">
+          <!--
+            RECEPTION PHOTO — replace the src below with your own photo
+            file or image URL, e.g. src="./reception-photo.jpg". Until a
+            valid image is set, the illustrated fallback below shows
+            through.
+          -->
+          <div class="event-photo-frame">
+            <svg class="event-illo" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="300" fill="#0E6E6A"/>
+              <g stroke="#F3D686" stroke-width="2" fill="none">
+                <path d="M100 220 L100 100 M100 100 A20 20 0 1 1 80 118"/>
+                <path d="M300 220 L300 100 M300 100 A20 20 0 1 0 320 118"/>
+              </g>
+              <path d="M140 240 Q200 180 260 240" stroke="#D4AF37" stroke-width="2" fill="none"/>
+              <g fill="#F3D686"><circle cx="200" cy="70" r="4"/><circle cx="230" cy="90" r="3"/><circle cx="170" cy="90" r="3"/></g>
+              <text x="200" y="285" text-anchor="middle" fill="#F3D686" font-size="14" font-family="Cormorant Garamond, serif" font-style="italic">A night of music, dance &amp; celebration</text>
+            </svg>
+            <img src="./Reception.jpg" alt="Reception evening"
+                 onerror="this.style.display='none';">
+          </div>
+          <div>
+            <p class="desc">Families come together for an unforgettable night of choreographed performances, live music, and dancing under the stars at the elegant Taj Hotel ballroom.</p>
+            <div class="event-meta">
+              <div><span class="k">Date</span>19 NOV 2026, 7:30 PM</div>
+              <div><span class="k">Attire</span>Glam Indo-Western</div>
+              <div><span class="k">Venue</span>I.C.R Convention (Sri Gayathri Pitam oppsite, Rural Police Station backside)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BRIDE & GROOM ================= -->
+<section class="section-cream" id="couple">
+  <div class="section-head reveal">
+    <p class="eyebrow">Meet</p>
+    <h2>The Bride &amp; The Groom</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+
+  <div class="couple-grid">
+    <div class="couple-card reveal">
+      <div class="frame">
+        <svg viewBox="0 0 340 450" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8C1E33"/><stop offset="100%" stop-color="#4A0E1C"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="328" height="438" fill="url(#fg1)" stroke="#D4AF37" stroke-width="4"/>
+          <rect x="20" y="20" width="300" height="410" fill="none" stroke="#D4AF37" stroke-width="1.2"/>
+          <path d="M20 20 L50 20 L20 50 Z" fill="#D4AF37"/>
+          <path d="M320 20 L290 20 L320 50 Z" fill="#D4AF37"/>
+          <path d="M20 430 L50 430 L20 400 Z" fill="#D4AF37"/>
+          <path d="M320 430 L290 430 L320 400 Z" fill="#D4AF37"/>
+          <!-- silhouette of groom -->
+          <g transform="translate(170,240)">
+            <ellipse cx="0" cy="-95" rx="34" ry="38" fill="#F3D686"/>
+            <path d="M-40 40 Q0 -10 40 40 L46 150 Q0 170 -46 150 Z" fill="#F3D686"/>
+            <path d="M-34 -125 Q0 -150 34 -125 L30 -95 Q0 -110 -30 -95 Z" fill="#D4AF37"/>
+          </g>
+          <text x="170" y="410" text-anchor="middle" fill="#F3D686" font-family="Yatra One, cursive" font-size="16">Groom Portrait</text>
+        </svg>
+        <!-- Drop the groom's real photo here: set the src below to your image file/URL -->
+         <img class="frame-photo" src="./_VKK7720.JPG" alt="Vinutha"
+             onerror="this.style.display='none';">
+      </div>
+      <p class="role">The Bride</p>
+      <h3 class="display">Vinutha</h3>
+      <p class="bio">Daughter of Mr.Krishna &amp; Mrs.Pushpavathi. A classical dancer and storyteller, radiant in spirit, grace, and warmth.</p>
+    </div>
+        
+
+    <div class="couple-card reveal">
+      <div class="frame">
+        <svg viewBox="0 0 340 450" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fg2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0E6E6A"/><stop offset="100%" stop-color="#0A2036"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="328" height="438" fill="url(#fg2)" stroke="#D4AF37" stroke-width="4"/>
+          <rect x="20" y="20" width="300" height="410" fill="none" stroke="#D4AF37" stroke-width="1.2"/>
+          <path d="M20 20 L50 20 L20 50 Z" fill="#D4AF37"/>
+          <path d="M320 20 L290 20 L320 50 Z" fill="#D4AF37"/>
+          <path d="M20 430 L50 430 L20 400 Z" fill="#D4AF37"/>
+          <path d="M320 430 L290 430 L320 400 Z" fill="#D4AF37"/>
+          <!-- silhouette of bride -->
+          <g transform="translate(170,250)">
+            <ellipse cx="0" cy="-95" rx="32" ry="36" fill="#F3D686"/>
+            <path d="M-14 -128 Q0 -150 14 -128" stroke="#D4AF37" stroke-width="4" fill="none"/>
+            <circle cx="0" cy="-136" r="4" fill="#D4AF37"/>
+            <path d="M-48 40 Q0 -5 48 40 L58 155 Q0 178 -58 155 Z" fill="#F3D686"/>
+            <path d="M-58 155 Q0 178 58 155 L64 175 Q0 195 -64 175 Z" fill="#D4AF37"/>
+          </g>
+          <text x="170" y="410" text-anchor="middle" fill="#F3D686" font-family="Yatra One, cursive" font-size="16">Bride Portrait</text>
+        </svg>
+        <!-- Drop the bride's real photo here: set the src below to your image file/URL -->
+         <img class="frame-photo" src="./_VKK7663.JPG" alt="Sanjeev"
+             onerror="this.style.display='none';">
+      </div>
+      <p class="role">The Groom</p>
+      <h3 class="display">Sanjeev</h3>
+      <p class="bio">Son of Mr.Murali Krishna &amp; Mrs.Radhika. An architect by profession, a dreamer at heart, and endlessly devoted to the people he loves.</p>
+      </div>
+  </div>
+</section>
+
+<!-- ================= COUNTDOWN ================= -->
+<section class="countdown-section" id="countdown">
+  <svg class="mountains" viewBox="0 0 1000 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="0,200 0,120 150,60 300,130 480,40 650,120 820,70 1000,140 1000,200" fill="#4A0E1C" opacity=".12"/>
+    <polygon points="0,200 0,160 200,110 400,160 600,100 800,150 1000,110 1000,200" fill="#D4AF37" opacity=".18"/>
+  </svg>
+  <div class="section-head reveal" style="position:relative;z-index:5;">
+    <p class="eyebrow">Almost There</p>
+    <h2>Counting The Days</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+  <div class="countdown-boxes reveal" id="countdown-boxes">
+    <div class="cbox"><div class="num" id="cd-days">00</div><div class="lab">Days</div></div>
+    <div class="cbox"><div class="num" id="cd-hours">00</div><div class="lab">Hours</div></div>
+    <div class="cbox"><div class="num" id="cd-mins">00</div><div class="lab">Minutes</div></div>
+    <div class="cbox"><div class="num" id="cd-secs">00</div><div class="lab">Seconds</div></div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="section-cream" id="gallery">
+  <div class="section-head reveal">
+    <p class="eyebrow">Memories</p>
+    <h2>Moments We Cherish</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+  <!--
+    GALLERY PHOTOS: each box below is an empty placeholder.
+    Replace the src="" values with your own photo files or image URLs,
+    e.g. src="./gallery-1.jpg". You can add or remove <div class="gallery-item">
+    blocks as needed — the layout will re-flow automatically.
+  -->
+  <div class="gallery-grid reveal" id="gallery-grid">
+    <div class="gallery-item"><img src="./image.png" alt="Gallery photo 1"><div class="gallery-cap">Add caption</div></div>
+    <div class="gallery-item"><img src="./1.jpeg" alt="Gallery photo 3"><div class="gallery-cap">Add caption</div></div>
+    <div class="gallery-item"><img src="./5.JPG" alt="Gallery photo 4"><div class="gallery-cap">Add caption</div></div>
+    <div class="gallery-item"><img src="./6.JPG" alt="Gallery photo 5"><div class="gallery-cap">Add caption</div></div>
+    <div class="gallery-item"><img src="./2.JPG" alt="Gallery photo 6"><div class="gallery-cap">Add caption</div></div>
+  </div>
+</section>
+
+<!-- ================= VENUE ================= -->
+<section class="section-navy" id="venue">
+  <div class="section-head reveal">
+    <p class="eyebrow">Join Us</p>
+    <h2>Venue &amp; Location</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+  <div class="venue-card reveal">
+    <h3 class="display">I.C.R Convention</h3>
+    <p> (Sri Gayathri Pitam oppsite, Rural Police Station backside)<br>Dhone, Nandyal District</p>
+    <a class="btn-gold" href="https://www.google.com/maps/search/?api=1&query=Mylapore+Chennai" target="_blank" rel="noopener">
+      View Location
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ================= SOCIAL ================= -->
+<section class="section-cream social-section" id="social">
+  <div class="reveal">
+    <p class="eyebrow">Share The Joy</p>
+    <div class="hashtag display">#VinuthaSanjeev</div>
+    <div class="social-icons">
+  <a href="./photos.html" aria-label="View Photos">
+    <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3 .01 4.1.06 1.1.05 1.8.22 2.5.47.7.27 1.2.6 1.7 1.1.5.5.9 1 1.1 1.7.25.7.42 1.4.47 2.5.05 1.1.06 1.4.06 4.1s-.01 3-.06 4.1c-.05 1.1-.22 1.8-.47 2.5a4.6 4.6 0 0 1-1.1 1.7 4.6 4.6 0 0 1-1.7 1.1c-.7.25-1.4.42-2.5.47-1.1.05-1.4.06-4.1.06s-3-.01-4.1-.06c-1.1-.05-1.8-.22-2.5-.47a4.6 4.6 0 0 1-1.7-1.1 4.6 4.6 0 0 1-1.1-1.7c-.25-.7-.42-1.4-.47-2.5C2.01 15 2 14.7 2 12s.01-3 .06-4.1c.05-1.1.22-1.8.47-2.5.27-.7.6-1.2 1.1-1.7.5-.5 1-.9 1.7-1.1.7-.25 1.4-.42 2.5-.47C9 2.01 9.3 2 12 2zm0 1.8c-2.65 0-2.97.01-4.02.06-.97.05-1.5.2-1.85.34-.46.18-.8.4-1.15.75s-.57.69-.75 1.15c-.14.35-.3.88-.34 1.85-.05 1.05-.06 1.37-.06 4.02s.01 2.97.06 4.02c.05.97.2 1.5.34 1.85.18.46.4.8.75 1.15s.69.57 1.15.75c.35.14.88.3 1.85.34 1.05.05 1.37.06 4.02.06s2.97-.01 4.02-.06c.97-.05 1.5-.2 1.85-.34.46-.18.8-.4 1.15-.75s.57-.69.75-1.15c.14-.35.3-.88.34-1.85.05-1.05.06-1.37.06-4.02s-.01-2.97-.06-4.02c-.05-.97-.2-1.5-.34-1.85a2.8 2.8 0 0 0-.75-1.15 2.8 2.8 0 0 0-1.15-.75c-.35-.14-.88-.3-1.85-.34-1.05-.05-1.37-.06-4.02-.06zm0 3.5a4.7 4.7 0 1 1 0 9.4 4.7 4.7 0 0 1 0-9.4zm0 1.8a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8zm5.9-2a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z"/></svg>
+  </a>
+</div>
+  </div>
+</section>
+
+<!-- ================= FAMILY INVITATION NOTE ================= -->
+<section class="section-cream" id="family-note">
+  <div class="section-head reveal">
+    <p class="eyebrow">With Love</p>
+    <h2>A Word From Our Families</h2>
+    <svg class="divider-lotus" viewBox="0 0 74 30"><path d="M37 28 C20 20 20 4 37 4 C54 4 54 20 37 28 Z" fill="none" stroke="#D4AF37" stroke-width="1.4"/><circle cx="37" cy="16" r="4" fill="#D4AF37"/></svg>
+  </div>
+  <div class="family-note-card reveal">
+    <p class="msg">
+      With immense joy and the blessings of our elders, we, the families of the bride and groom, warmly invite you
+      to be a part of this sacred occasion. Your presence, love, and blessings mean the world to us as we celebrate
+      the union of our beloved children, Sanjeev and Vinutha. We look forward to sharing this joyous day with you.
+    </p>
+    <div class="fam-names display">
+      <strong>Family of Yelukuru</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="fnames display">Vinutha &amp; Sanjeev</div>
+  <p style="opacity:.75;">Thank you for being a cherished part of our story.</p>
+  <div class="fline">20 · 11 · 2026 &nbsp;·&nbsp; Dhone, Nandyal District</div>
+</footer>
+
+<script>
+/* ---------------- NAV SCROLL STATE ---------------- */
+const topnav = document.getElementById('topnav');
+window.addEventListener('scroll', () => {
+  topnav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ---------------- REVEAL ON SCROLL ---------------- */
+const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+/* ---------------- ACCORDION EVENTS ---------------- */
+document.querySelectorAll('[data-event]').forEach(item => {
+  item.querySelector('.event-head').addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('[data-event]').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+/* ---------------- COUNTDOWN ---------------- */
+const weddingDate = new Date('2026-11-20T09:42:00');
+function updateCountdown(){
+  const now = new Date();
+  let diff = weddingDate - now;
+  if (diff < 0) diff = 0;
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ---------------- FLOATING GOLD PARTICLES ---------------- */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function makeParticle(){
+  return {
+    x: Math.random()*W,
+    y: H + Math.random()*100,
+    r: 1 + Math.random()*2.4,
+    speed: 0.25 + Math.random()*0.6,
+    drift: (Math.random()-0.5)*0.4,
+    alpha: 0.2 + Math.random()*0.5,
+    twinkle: Math.random()*Math.PI*2
+  };
+}
+const COUNT = reduceMotion ? 0 : 42;
+for (let i=0;i<COUNT;i++) particles.push(makeParticle());
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p => {
+    p.y -= p.speed;
+    p.x += p.drift;
+    p.twinkle += 0.05;
+    if (p.y < -10) { p.y = H + 10; p.x = Math.random()*W; }
+    const a = p.alpha * (0.6 + 0.4*Math.sin(p.twinkle));
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(212,175,55,${a})`;
+    ctx.shadowColor = 'rgba(243,214,134,0.9)';
+    ctx.shadowBlur = 6;
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+if (!reduceMotion) animate();
+
+/* ---------------- HERO PARALLAX ---------------- */
+const photoLayer = document.querySelector('.hero-photo-layer');
+if (!reduceMotion) {
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight) {
+      photoLayer.style.transform = `translateY(${y*0.25}px)`;
+    }
+  });
+}
+</script>
+</body>
+</html>

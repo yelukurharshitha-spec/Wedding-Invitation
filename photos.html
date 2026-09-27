@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>NEW MOSAIC PROJECT!</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<style>
+  :root{
+    --bg-0: #0a0714;
+    --bg-1: #120a24;
+    --violet: #7b2ff7;
+    --magenta: #ff2e88;
+    --cyan: #22e5c8;
+    --amber: #ffb020;
+    --red: #ff2d3d;
+    --paper: #f6f3ec;
+    --ink: #ffffff;
+    --ink-dim: #b7b0cc;
+    --display: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    --body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: var(--body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------------- ambient background ---------------- */
+  .bg-field{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 45% at 15% 10%, rgba(123,47,247,0.35), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 90% 15%, rgba(255,46,136,0.28), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(34,229,200,0.20), transparent 60%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 60%, var(--bg-0));
+  }
+  .blob{
+    position:absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.5;
+    mix-blend-mode: screen;
+    animation: drift 18s ease-in-out infinite;
+  }
+  .blob.b1{ width: 380px; height: 380px; background: var(--violet); top: -80px; left: -60px; animation-duration: 22s; }
+  .blob.b2{ width: 320px; height: 320px; background: var(--magenta); top: 30%; right: -80px; animation-duration: 26s; animation-delay: -6s; }
+  .blob.b3{ width: 300px; height: 300px; background: var(--cyan); bottom: -100px; left: 30%; animation-duration: 20s; animation-delay: -3s; }
+  @keyframes drift{
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(30px, -40px) scale(1.12); }
+  }
+
+  /* ---------------- header ---------------- */
+  header{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px clamp(20px, 5vw, 56px) 10px;
+  }
+  header .logo{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+  header .logo span{ color: var(--red); }
+  #shuffle-btn{
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  }
+  #shuffle-btn:hover{
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-1px);
+  }
+  #shuffle-btn:active{ transform: translateY(0) scale(0.97); }
+
+  .hint{
+    text-align:center;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin: 4px 0 28px;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* ---------------- mosaic ---------------- */
+  .stage{
+    position: relative;
+    z-index: 5;
+    perspective: 1800px;
+    padding: 0 clamp(16px, 4vw, 48px);
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-auto-rows: 92px;
+    grid-auto-flow: dense;
+    gap: clamp(10px, 1.6vw, 18px);
+    transform-style: preserve-3d;
+  }
+  @media (min-width: 640px){
+    .grid{ grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); grid-auto-rows: 100px; }
+  }
+  @media (min-width: 1024px){
+    .grid{ grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); grid-auto-rows: 110px; }
+  }
+
+  .card{
+    position: relative;
+    grid-column: span var(--cspan, 1);
+    grid-row: span var(--rspan, 2);
+    border-radius: 14px;
+    padding: 8px 8px 0 8px;
+    background: var(--paper);
+    box-shadow:
+      0 2px 3px rgba(0,0,0,0.25),
+      0 22px 40px -16px rgba(0,0,0,0.65);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    cursor: default;
+    transition: box-shadow 0.35s ease;
+  }
+
+  .card .frame{
+    position: relative;
+    width: 100%;
+    height: calc(100% - 8px);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1c1826;
+  }
+
+  .card img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.18) contrast(1.05);
+    transition: transform 0.6s cubic-bezier(.2,.8,.3,1);
+  }
+
+  .card .shine{
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.35), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .card .glow-ring{
+    position: absolute;
+    inset: -1px;
+    border-radius: 15px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--magenta), var(--cyan), var(--amber));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .card .tag{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .card .idx{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-family: var(--display);
+    font-size: 10px;
+    color: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(3px);
+    padding: 2px 6px;
+    border-radius: 999px;
+  }
+
+  .card:hover{
+    box-shadow:
+      0 4px 6px rgba(0,0,0,0.3),
+      0 30px 55px -14px rgba(0,0,0,0.7);
+  }
+  .card:hover .shine{ opacity: 1; }
+  .card:hover .glow-ring{ opacity: 1; }
+  .card:hover .tag{ opacity: 1; transform: translateY(0); }
+  .card:hover img{ transform: scale(1.06); }
+
+  /* ---------------- bottom banner ---------------- */
+  .banner{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    text-align: center;
+    padding: clamp(56px, 9vw, 96px) 20px 28px;
+  }
+  .banner .badge{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(13px, 2vw, 16px);
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--red), #ff5a3d);
+    padding: 10px 20px;
+    border-radius: 999px;
+    transform: rotate(-4deg);
+    box-shadow: 0 10px 26px -8px rgba(255, 45, 61, 0.65);
+  }
+  .banner h2{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(30px, 7vw, 78px);
+    line-height: 0.95;
+    margin: 0;
+    letter-spacing: -0.01em;
+    background: linear-gradient(100deg, #fff 30%, var(--cyan) 60%, var(--magenta) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ---------------- footer ---------------- */
+  footer{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px clamp(20px, 5vw, 56px) 40px;
+    flex-wrap: wrap;
+    gap: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 10px;
+  }
+  footer .brand{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    color: var(--ink-dim);
+  }
+  footer .icons{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  footer .icons svg{ width: 20px; height: 20px; display:block; }
+  footer .copy{
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.03em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .blob{ animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-field">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header>
+  <div class="logo"></div>
+  <button id="shuffle-btn">⟳ Shuffle</button>
+</header>
+
+<p class="hint">tap the shuffle button to rebuild the grid</p>
+
+<div class="stage">
+  <div class="grid" id="grid"></div>
+</div>
+
+<script>
+/* =====================================================================
+   REPLACE YOUR PHOTOS HERE.
+   "src"     — image URL or local path
+   "tag"     — small label shown on hover (leave "" to hide)
+   "wide"    — true for a landscape-leaning tile, false for portrait/square
+   "feature" — true makes it a larger 2x2 hero tile (use sparingly)
+   ===================================================================== */
+const photos = [
+  { src: "assets/1.JPG", tag: "Portrait — 01", wide: false, feature: false },
+  { src: "assets/2.JPG", tag: "Fashion — 03", wide: false,  feature: false },
+  { src: "assets/3.JPG", tag: "Lifestyle — 02",   wide: true, feature: false },
+  { src: "assets/4.JPG", tag: "Feature — 04",   wide: true,  feature: true  },
+  { src: "assets/5.JPG", tag: "Nature — 05",    wide: false, feature: false },
+  { src: "assets/6.JPG", tag: "Detail — 06",    wide: true,  feature: false },
+  { src: "assets/7.JPG", tag: "Portrait — 07",  wide: false, feature: false },
+  { src: "assets/8.JPG", tag: "Studio — 08",    wide: false, feature: false },
+  { src: "assets/9.JPG", tag: "Travel — 09",    wide: true,  feature: false },
+  { src: "assets/10.JPG", tag: "Lifestyle — 11",  wide: true, feature: false },
+  { src: "assets/11.JPG", tag: "Portrait — 10", wide: false,  feature: false },
+  { src: "assets/12.JPG", tag: "Nature — 12",    wide: false, feature: false },
+  { src: "assets/13.JPG", tag: "Fashion — 13",   wide: false, feature: false },
+  { src: "assets/14.JPG", tag: "Portrait — 14",    wide: false,  feature: false },
+  { src: "assets/15.JPG", tag: "Portrait — 15",  wide: false, feature: false },
+  { src: "assets/16.JPG", tag: "Studio — 16",    wide: true,  feature: false },
+  { src: "assets/17.JPG", tag: "Travel — 17",    wide: false, feature: false },
+  { src: "assets/18.JPG", tag: "Nature — 18",    wide: false, feature: false },
+  { src: "assets/19.JPG", tag: "Portrait — 19", wide: false, feature: false },
+  { src: "assets/20.JPG", tag: "Portrait — 28", wide: false,  feature: false },
+  { src: "assets/21.JPG", tag: "Fashion — 21",   wide: false, feature: false },
+  { src: "assets/22.JPG", tag: "Feature — 22",   wide: true,  feature: true  },
+  { src: "assets/23.JPG", tag: "Nature — 23",    wide: false, feature: false },
+  { src: "assets/24.JPG", tag: "Detail — 24",    wide: true,  feature: false },
+  { src: "assets/25.JPG", tag: "Portrait — 25",  wide: false, feature: false },
+  { src: "assets/26.JPG", tag: "Studio — 26",    wide: false, feature: false },
+  { src: "assets/27.JPG", tag: "Travel — 27",    wide: true,  feature: false },
+  { src: "assets/28.JPG", tag: "Lifestyle — 20",  wide: true, feature: false },
+  { src: "assets/29.JPG", tag: "Studio — 08",    wide: false, feature: false },
+  { src: "assets/30.JPG", tag: "Portrait — 15",  wide: false, feature: false },
+];
+/* ===================================================================== */
+
+const gridEl = document.getElementById('grid');
+const shuffleBtn = document.getElementById('shuffle-btn');
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function spanFor(photo){
+  if(photo.feature) return { c: 2, r: 4 };
+  if(photo.wide)     return { c: 2, r: 2 };
+  return { c: 1, r: Math.random() > 0.4 ? 3 : 2 };
+}
+
+let cards = [];
+
+function buildGrid(){
+  gridEl.innerHTML = '';
+  cards = [];
+
+  const order = shuffle(photos.map((p, i) => i));
+
+  order.forEach(i => {
+    const photo = photos[i];
+    const span = spanFor(photo);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.setProperty('--cspan', span.c);
+    card.style.setProperty('--rspan', span.r);
+
+    card.innerHTML = `
+      <div class="frame">
+        <img src="${photo.src}" alt="${photo.tag || ''}" loading="lazy">
+        <div class="shine"></div>
+        ${photo.tag ? `<div class="tag">${photo.tag}</div>` : ''}
+        <div class="idx">${String(i + 1).padStart(2,'0')}</div>
+      </div>
+      <div class="glow-ring"></div>
+    `;
+
+    /* Clicking a photo no longer reshuffles the grid — only the Shuffle
+       button (or the initial page load) rebuilds the mosaic. */
+
+    gridEl.appendChild(card);
+    cards.push(card);
+  });
+}
+
+/* ---------------- entrance: cards fly in from random 3D angles ---------------- */
+function entrance(){
+  cards.forEach(card => {
+    const fromX = (Math.random() - 0.5) * 900;
+    const fromY = (Math.random() > 0.5 ? -1 : 1) * (300 + Math.random() * 400);
+    const fromZ = -900 - Math.random() * 500;
+    const rotX = (Math.random() - 0.5) * 140;
+    const rotY = (Math.random() - 0.5) * 160;
+    const rotZ = (Math.random() - 0.5) * 40;
+
+    gsap.set(card, { opacity: 0, x: fromX, y: fromY, z: fromZ, rotationX: rotX, rotationY: rotY, rotationZ: rotZ, transformPerspective: 1200 });
+  });
+
+  const tl = gsap.timeline();
+  tl.to(cards, {
+    opacity: 1,
+    x: 0, y: 0, z: 0,
+    rotationX: 0, rotationY: 0, rotationZ: 0,
+    duration: 1.3,
+    ease: "power3.out",
+    stagger: { each: 0.045, from: "random" }
+  });
+  return tl;
+}
+
+/* ---------------- explode + rebuild ---------------- */
+let rebuilding = false;
+function rebuild(){
+  if(rebuilding) return;
+  rebuilding = true;
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      buildGrid();
+      entrance().eventCallback('onComplete', () => {
+        rebuilding = false;
+      });
+    }
+  });
+
+  tl.to(cards, {
+    opacity: 0,
+    x: () => (Math.random() - 0.5) * 1100,
+    y: () => (Math.random() - 0.5) * 800,
+    z: () => -600 - Math.random() * 600,
+    rotationX: () => (Math.random() - 0.5) * 200,
+    rotationY: () => (Math.random() - 0.5) * 220,
+    rotationZ: () => (Math.random() - 0.5) * 90,
+    duration: 0.75,
+    ease: "power2.in",
+    stagger: { each: 0.02, from: "random" }
+  });
+}
+
+/* Only the Shuffle button triggers a rebuild now — no periodic
+   auto-shuffle, and no shuffle on photo click. */
+shuffleBtn.addEventListener('click', rebuild);
+
+/* ---------------- init ---------------- */
+buildGrid();
+entrance();
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    gsap.set(cards, { clearProps: "transform,opacity" });
+  }, 250);
+});
+</script>
+
+</body>
+</html>
